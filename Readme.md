@@ -24,7 +24,7 @@ pip install flask requests
 python ollama-adapter.py
 ```
 
-これにより、`http://localhost:8000`でOpenAI互換のAPIエンドポイントが利用可能になります。
+これにより、`http://localhost:8080`でOpenAI互換のAPIエンドポイントが利用可能になります。
 
 ## 2. Second Meの設定変更
 
