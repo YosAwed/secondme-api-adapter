@@ -1,0 +1,39 @@
+# Python関連
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 仮想環境
+venv/
+ENV/
+.env
+
+# ログファイル
+*.log
+
+# IDEの設定ファイル
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OSの生成ファイル
+.DS_Store
+Thumbs.db
