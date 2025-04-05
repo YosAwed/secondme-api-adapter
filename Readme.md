@@ -1,76 +1,131 @@
+# Secondme API Adapter
+
+[English](#english) | [日本語](#japanese)
+
+<a id="english"></a>
+# Setup Guide for Using Ollama with Second Me
+
+## Overview
+This adapter provides OpenAI-compatible API endpoints for Ollama, enabling seamless integration with Second Me.
+
+## Prerequisites
+- Ollama installed and running locally
+- Llama 3.2 model downloaded in Ollama
+- Python installed
+- Second Me set up
+
+## Quick Start
+
+1. Install required packages:
+```bash
+pip install -r requirements.txt
+```
+
+2. Start the adapter:
+```bash
+python secondme_api_adapter.py
+```
+
+The adapter will start on `http://localhost:8080`.
+
+## Configuration
+
+### Second Me Settings
+Update Second Me's configuration to use the adapter:
+```
+OPENAI_API_BASE=http://localhost:8080
+OPENAI_API_KEY=dummy  # Any value works
+```
+
+### Model Configuration
+Modify `config.py` to change the models:
+```python
+CHAT_MODEL_NAME = "llama3.2"           # Model for chat
+EMBEDDING_MODEL_NAME = "nomic-embed-text"  # Model for embeddings
+```
+
+## Troubleshooting
+
+### API Format Issues
+Check the conversion logic in `adapters.py` if you encounter response format issues.
+
+### Error Logging
+If problems occur:
+1. Check the adapter's console output
+2. Enable debug mode in `config.py`
+3. Test endpoints directly using curl
+
+### Comparison with litellm
+Unlike litellm, this adapter is specifically customized for Ollama models, offering better control when needed.
+
+## Advanced Features
+Possible enhancements:
+- Streaming response support
+- Multi-model support
+- Accurate token counting
+- Enhanced error handling
+
+---
+
+<a id="japanese"></a>
 # Second MeでOllamaを使用するためのセットアップガイド
 
-## 前提条件
+## 概要
+このアダプターは、OllamaのAPIをOpenAI互換のエンドポイントとして提供し、Second Meとの連携を可能にします。
 
+## 前提条件
 - Ollamaがインストールされており、ローカルで実行されていること
 - Llama 3.2モデルがOllamaにダウンロードされていること
 - Pythonがインストールされていること
 - Second Meがセットアップされていること
 
-## 1. APIアダプターのセットアップ
+## クイックスタート
 
-### アダプタースクリプトのインストール
-
-1. 提供したコード（`ollama-adapter.py`）を保存します
-2. 必要なライブラリをインストールします:
-
+1. 必要なパッケージをインストール:
 ```bash
-pip install flask requests
+pip install -r requirements.txt
 ```
 
-3. アダプタースクリプトを実行します:
-
+2. アダプターを起動:
 ```bash
-python ollama-adapter.py
+python secondme_api_adapter.py
 ```
 
-これにより、`http://localhost:8080`でOpenAI互換のAPIエンドポイントが利用可能になります。
+アダプターは`http://localhost:8080`で起動します。
 
-## 2. Second Meの設定変更
+## 設定
 
-Second Meの設定ファイルまたは環境変数を編集して、OpenAIのエンドポイントを以下のように変更します:
-
+### Second Meの設定
+Second Meの設定を以下のように変更します:
 ```
 OPENAI_API_BASE=http://localhost:8080
 OPENAI_API_KEY=dummy  # 任意の値で構いません
 ```
 
-注: Second Meは8000番ポートを使用しているため、アダプターは8080番ポートで実行します。
-
-## 3. モデル名の設定
-
-アダプタースクリプト内のモデル名変数を必要に応じて変更できます。現在の設定は以下の通りです：
-
+### モデルの設定
+`config.py`でモデルを変更できます:
 ```python
-CHAT_MODEL_NAME = "llama3.2"      # チャット用モデル
+CHAT_MODEL_NAME = "llama3.2"           # チャット用モデル
 EMBEDDING_MODEL_NAME = "nomic-embed-text"  # 埋め込み用モデル
 ```
 
-## 4. トラブルシューティング
+## トラブルシューティング
 
-### リクエスト/レスポンス形式の問題
+### API形式の問題
+レスポンス形式に問題がある場合は、`adapters.py`の変換ロジックを確認してください。
 
-APIの応答形式に問題がある場合は、アダプタースクリプトの`chat_completions`または`embeddings`関数内の変換ロジックを確認・修正します。
+### エラーログ
+問題が発生した場合:
+1. アダプターのコンソール出力を確認
+2. `config.py`でデバッグモードを有効化
+3. curlを使用して直接エンドポイントをテスト
 
-### エラーログの確認
+### litellmとの比較
+litellmと異なり、このアダプターは特定のOllamaモデル用にカスタマイズされており、必要な場合により細かい制御が可能です。
 
-問題が発生した場合は、アダプタースクリプトのコンソール出力とSecond Meのログを確認してください。
-
-問題の特定には以下の方法も効果的です:
-
-1. curlを使用して直接APIをテストする
-2. デバッグログを有効にする
-3. リクエスト/レスポンスの内容をログに記録する
-
-### litellmとの違い
-
-litellmを使用した場合と異なり、このアダプターは特定のOllamaモデル用にカスタマイズされています。litellmで問題があった場合、このアプローチの方が制御しやすい可能性があります。
-
-## 5. 高度な設定
-
-必要に応じて、以下の拡張機能を実装できます:
-
+## 高度な機能
+実装可能な拡張機能:
 - ストリーミングレスポンスのサポート
 - 複数モデルのサポート
-- トークン数のより正確な計算
+- トークン数の正確な計算
 - エラーハンドリングの改善
