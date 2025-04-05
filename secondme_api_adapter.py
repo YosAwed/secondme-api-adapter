@@ -11,69 +11,66 @@ from adapters import (
 
 app = Flask(__name__)
 
-# Ollamaのエンドポイント設定
-OLLAMA_CHAT_URL = "http://localhost:11434/api/chat"
-OLLAMA_EMBEDDING_URL = "http://localhost:11434/api/embeddings"
-CHAT_MODEL_NAME = "llama3.2"  # チャット用モデル
-EMBEDDING_MODEL_NAME = "nomic-embed-text"  # 埋め込み用モデル
+# Import settings from config.py
+from config import OLLAMA_CHAT_URL, OLLAMA_EMBEDDING_URL, CHAT_MODEL_NAME, EMBEDDING_MODEL_NAME
 
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
     """
-    OpenAIのchat completions APIと互換性のあるエンドポイント
+    Endpoint compatible with OpenAI's chat completions API
     """
     try:
         data = request.json
         
-        # OpenAIからOllamaへのリクエスト形式変換
+        # Convert request format from OpenAI to Ollama
         ollama_request = convert_to_ollama_chat_request(data)
         
-        # Ollamaへリクエスト送信
+        # Send request to Ollama
         ollama_response, error = send_ollama_chat_request(ollama_request)
         
         if error:
             return jsonify({"error": error[0]}), error[1]
         
-        # OllamaからOpenAI形式への変換
+        # Convert response from Ollama to OpenAI format
         openai_response = convert_from_ollama_chat_response(ollama_response)
         
         return jsonify(openai_response)
     except Exception as e:
-        logger.error(f"チャット完了エンドポイントでエラーが発生しました: {str(e)}")
+        logger.error(f"Error occurred in chat completions endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/v1/embeddings', methods=['POST'])
 def embeddings():
     """
-    OpenAIのembeddings APIと互換性のあるエンドポイント
+    Endpoint compatible with OpenAI's embeddings API
     """
     try:
         data = request.json
         
-        # OpenAIからOllamaへのリクエスト形式変換
+        # Convert request format from OpenAI to Ollama
         ollama_request, input_text = convert_to_ollama_embedding_request(data)
         
-        # Ollamaへリクエスト送信
+        # Send request to Ollama
         ollama_response, error = send_ollama_embedding_request(ollama_request)
         
         if error:
             return jsonify({"error": error[0]}), error[1]
         
-        # OllamaからOpenAI形式への変換
+        # Convert response from Ollama to OpenAI format
         openai_response = convert_from_ollama_embedding_response(ollama_response, input_text)
         
         return jsonify(openai_response)
     except Exception as e:
-        logger.error(f"埋め込みエンドポイントでエラーが発生しました: {str(e)}")
+        logger.error(f"Error occurred in embeddings endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/health', methods=['GET'])
 def health_check():
     """
-    ヘルスチェックエンドポイント
+    Health check endpoint
     """
     return jsonify({"status": "ok", "message": "Secondme API Adapter is running"})
 
 if __name__ == '__main__':
-    logger.info(f"Secondme API Adapter を {ADAPTER_HOST}:{ADAPTER_PORT} で起動します")
+    logger.info(f"Starting Secondme API Adapter on {ADAPTER_HOST}:{ADAPTER_PORT}")
     app.run(host=ADAPTER_HOST, port=ADAPTER_PORT, debug=DEBUG_MODE)
